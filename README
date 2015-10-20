@@ -1,0 +1,13 @@
+Instrucciones de uso 
+
+Se necesita tener instaladas las librerias de numpy y matplotlib
+para su correcto funcionamiento
+
+Versión de python utilizada 2.7
+
+################################################################
+
+Unicamente se debe ejecutar el archivo interfaz.py
+y dentro de este se manda a llamar a los demás archivos 
+
+################################################################
