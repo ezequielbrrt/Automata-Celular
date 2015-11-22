@@ -10,9 +10,10 @@ import matplotlib.animation as animation
 import time
 import random
 
-fig = plt.figure()
-ax1 = fig.add_subplot(1,1,1)
+
 i = 0
+
+contador = 0
 
 #obtencion de datos del atractor
 dataA = open("DatosAtractor.txt","r").read()
@@ -27,11 +28,16 @@ datosDensidad = dataD.split(',')
 tiempo = open("Tiempo.txt","r").read()
 tmp = tiempo.split('\n')
 
+restablecerDatos = open("DatosGrafica.txt", "w")
+restablecerDatos.write("")
+restablecerDatos.close()
+
+
 
 #Creacion de constante para el numero de elementos en el array
 N = int(datosDensidad[4])
 constante = N * N
-valores = array(datosAtractor) 
+valores = datosAtractor 
 
 aux = valores[i:constante]
 aux2 = valores[constante:constante*2]
@@ -47,49 +53,68 @@ aux10 = valores[constante*9:constante*10]
 valoresID = []
 especial = 0
 
-for x in xrange(0,100):
+
+for x in xrange(1,100):
     if aux[x] == aux2[x] :
-        if aux2[x] != 0:
-            print "Encontre recursion en el paso 1" + "id " + str(x+1)
+        pass#print "Encontre recursion en el paso 1" + "id " + str(x+1)
     if aux2[x] == aux3[x] :
-        if aux2[x] != 0:
-            print "Encontre recursion en el paso 2" + "id " + str(x+1)
+        pass #print "Encontre recursion en el paso 2" + "id " + str(x+1)
     if aux3[x] == aux4[x] :
-        if aux2[x] != 0:
-            print "Encontre recursion en el paso 3" + "id " + str(x+1)
-            valoresID.append(str(x+1))
+        valoresID.append(str(x))
     if aux4[x] == aux5[x] :
-        if aux2[x] != 0:
-            print "Encontre recursion en el paso 4" + "id " + str(x+1)
-            valoresID.append(str(x+1))
+        valoresID.append(str(x))
     if aux5[x] == aux6[x] :
-        if aux2[x] != 0:
-            print "Encontre recursion en el paso 5" + "id " + str(x+1)
-            valoresID.append(str(x+1))
+        valoresID.append(str(x))
     if aux6[x] == aux7[x] :
-        if aux2[x] != 0:
-            print "Encontre recursion en el paso 6" + "id " + str(x+1)
-            valoresID.append(str(x+1))
+        valoresID.append(str(x))
     if aux7[x] == aux8[x] :
-        if aux2[x] != 0:
-            print "Encontre recursion en el paso 7" + "id " + str(x+1)
-            valoresID.append(str(x+1))
+        valoresID.append(str(x))
     if aux8[x] == aux9[x] :
-        if aux2[x] != 0:
-            print "Encontre recursion en el paso 8" + "id " + str(x+1)
-            valoresID.append(str(x+1))
+        valoresID.append(str(x))
     if aux9[x] == aux10[x] :
-        if aux2[x] != 0:
-            print "Encontre recursion en el paso 9" + "id " + str(x+1)
-            valoresID.append(str(x+1))
-
+        valoresID.append(str(x))
 print valoresID
-for i in valoresID:
-    print i
 
-fila1 = [aux[3]+","+aux2[3]+","+aux3[3]+","+aux4[3]+","+aux5[3]+","
-+aux6[3]+","+aux7[3]+","+aux8[3]+","+aux9[3]+","+aux10[3]]
+fig = plt.figure()
+ax1 = fig.add_subplot(1,1,1)
+for i in range(0,len(valoresID)-1):
+    contadorCeros = 0
+    fila1 = ""
+    fila1 = (aux[int(valoresID[i])]+","+aux2[int(valoresID[i])]+","
+        +aux3[int(valoresID[i])]+","+aux4[int(valoresID[i])]+","+aux5[int(valoresID[i])]
+        +","+aux6[int(valoresID[i])]+","+aux7[int(valoresID[i])]+","+aux8[int(valoresID[i])]
+        +","+aux9[int(valoresID[i])]+","+aux10[int(valoresID[i])])
+    for i in fila1:
+        if i == "0":
+            contadorCeros += 1
+    if contadorCeros > 1:
+        pass
+    else:
+        datos = open("DatosGrafica.txt","a")
+        datos.write(str(fila1)+'\n')
+        datos.close()
+ 
 
-print 
-print fila1
+def animate(update):
+    global contador
+    pullData = open("DatosGrafica.txt","r").read()
+    dataArray = pullData.split('\n')
+    dataArray.remove("")
+    xar = [1,2,3,4,5,6,7,8,9,10]
+    yar = []
+        
+    y = dataArray[contador].split(',')
+    for i in y:
+        yar.append(i)
+    ax1.plot(xar,yar)
+    plt.title("Atractores")
+    plt.xlabel("Tiempo Transcurrido")
+    plt.ylabel("Numero de Celulas")
+    plt.grid(True)
+    contador += 1
+
+ani = animation.FuncAnimation(fig , animate, interval=10)
+plt.show()
+
+
 
